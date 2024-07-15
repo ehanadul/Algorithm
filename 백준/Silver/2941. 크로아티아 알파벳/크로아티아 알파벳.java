@@ -6,13 +6,13 @@ public class Main {
 	public static void main(String[] args) throws IOException{
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		String a = br.readLine();        
-        String[] croatiaAlphabet = { "c=", "c-", "dz=", "d-", "lj", "nj", "s=", "z=" };
+        String[] croatia = { "c=", "c-", "dz=", "d-", "lj", "nj", "s=", "z=" };
 		int index = 0;
 
-		for (int i = 0; i < croatiaAlphabet.length; i++) {		
-            index = a.indexOf(croatiaAlphabet[i]);            
+		for (int i = 0; i < croatia.length; i++) {		
+            index = a.indexOf(croatia[i]);            
 			if (index >= 0) { 
-				a = a.replaceAll(croatiaAlphabet[i], "A");
+				a = a.replaceAll(croatia[i], "A");
 			}
 		}
 		System.out.println(a.length());
