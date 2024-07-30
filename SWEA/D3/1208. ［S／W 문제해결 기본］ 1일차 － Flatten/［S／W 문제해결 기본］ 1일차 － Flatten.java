@@ -1,21 +1,23 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Scanner;
 import java.io.FileInputStream;
 
 
 class Solution
 {
-	public static void main(String args[]) throws Exception
-	{
-		Scanner sc = new Scanner(System.in);
+	public static void main(String[] args)throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		
 		for(int test_case = 1; test_case <= 10; test_case++) {
 			
-			int num = sc.nextInt();
+			int num = Integer.parseInt(br.readLine());
 			int[] box = new int[100];
 			
-			
+			String[] input = br.readLine().split(" ");
 			for(int i=0;i<100;i++) {
-				box[i] = sc.nextInt();
+				box[i] = Integer.parseInt(input[i]);
 			}
 			
 			selectionSort(box);
@@ -31,7 +33,7 @@ class Solution
 		
 			 System.out.println("#" + test_case + " " + (box[99] - box[0]));
 		}
-		sc.close();
+		
 	}
 
 	
@@ -58,4 +60,6 @@ class Solution
 	
 	}
 	
+	
 }
+
