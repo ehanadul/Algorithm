@@ -1,21 +1,24 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+
 public class Main {
-
-    public static void main(String[] args) {
-
-        Scanner sc = new Scanner(System.in);
-
-        int A = sc.nextInt();    // 시
-        int B = sc.nextInt();    // 분
-        int C = sc.nextInt();    // 요리하는데 필요한 시간
-
-        B = A * 60 + B;
-        B = B + C;
-
-        A = (B / 60) % 24;       // 시(24시 이상이면 0시부터 시작)
-        int min = B % 60;        // 분
-
-        System.out.println(A + " " + min);
-
-    }
+	public static void main(String[] args) throws IOException {
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+		StringTokenizer st = new StringTokenizer(br.readLine());
+				
+				
+		int h = Integer.parseInt(st.nextToken());
+		int m = Integer.parseInt(st.nextToken());
+		int time = Integer.parseInt(br.readLine().trim());
+		
+		br.close();
+		int totalMinutes = h * 60 + m +time;
+		
+		h= (totalMinutes/60)%24;
+		m= totalMinutes%60;
+			
+		System.out.println(h + " " + m);
+	}
 }
