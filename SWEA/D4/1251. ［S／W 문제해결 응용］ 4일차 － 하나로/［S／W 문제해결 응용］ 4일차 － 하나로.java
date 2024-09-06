@@ -1,109 +1,90 @@
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.Arrays;
-import java.util.StringTokenizer;
-
+import java.io.*;
+import java.util.*;
+  
 public class Solution {
-    // 1251. [S/W 문제해결 응용] 4일차 - 하나로
-    static class Edge implements Comparable<Edge> {
-        int A, B;
-        double W;
+//1251. [S/W 문제해결 응용] 4일차 - 하나로
+// 프림 알고리즘으로 풀이
 
-        public Edge(int a, int b, double w) {
-            A = a;
-            B = b;
-            W = w;
+    static class Node {
+        int idx;
+        long x, y;
+        Node(int idx, long x, long y) {
+            this.idx = idx;
+            this.x = x; this.y = y;
         }
-
+    }
+      
+    static class Edge implements Comparable<Edge> {
+        Node n1, n2;
+        long weight;
+          
+        Edge(Node n1, Node n2) {
+            this.n1 = n1; this.n2 = n2;
+            this.weight = getCost(n1, n2);
+        }
+          
         @Override
         public int compareTo(Edge o) {
-            return Double.compare(this.W, o.W); 
+            return Long.compare(this.weight, o.weight);
         }
     }
-
-    static int T, N;
-    static long[] X;
-    static long[] Y;
-    static double E;
-    static Edge[] edges;
-    static int[] p;
-
-    public static void main(String[] args) throws NumberFormatException, IOException {
+  
+    public static void main(String[] args) throws Exception {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-        StringTokenizer st;
-        T = Integer.parseInt(br.readLine());
-
-        for (int tc = 1; tc <= T; tc++) {
-            N = Integer.parseInt(br.readLine());
-            X = new long[N];
-            Y = new long[N];
-            edges = new Edge[N * (N - 1) / 2]; 
-            p = new int[N]; 
-
-            // x
-            st = new StringTokenizer(br.readLine());
-            for (int i = 0; i < N; i++) {
-                X[i] = Long.parseLong(st.nextToken());
-            }
-
-            // y
-            st = new StringTokenizer(br.readLine());
-            for (int i = 0; i < N; i++) {
-                Y[i] = Long.parseLong(st.nextToken());
-            }
-
-           
-            E = Double.parseDouble(br.readLine());
-
-            makeSet(); 
-
-            // 간선 만들기
-            int edgeCount = 0;
-            for (int i = 0; i < N; i++) {
-                for (int j = i + 1; j < N; j++) {
-                    double distance = Math.sqrt(Math.pow(X[i] - X[j], 2) + Math.pow(Y[i] - Y[j], 2));
-                    double cost = E * Math.pow(distance, 2);
-                    edges[edgeCount++] = new Edge(i, j, cost);
+        StringBuilder sb = new StringBuilder();
+        StringTokenizer st = null;
+          
+        int T = Integer.parseInt(br.readLine());
+        for(int test = 1; test <= T; test++) {
+            sb.append("#").append(test).append(" ");
+              
+            int N = Integer.parseInt(br.readLine());
+            Node[] nodes = new Node[N];
+            boolean[] visited = new boolean[N];
+              
+            long[] xPos = new long[N];
+            long[] yPos = new long[N];
+            long[] cost = new long[N];
+            Arrays.fill(cost, Long.MAX_VALUE);
+              
+            st = new StringTokenizer(br.readLine(), " ");
+            for(int i = 0; i < N; i++) xPos[i] = Long.parseLong(st.nextToken());
+              
+            st = new StringTokenizer(br.readLine(), " ");
+            for(int i = 0; i < N; i++) yPos[i] = Long.parseLong(st.nextToken());
+              
+            for(int i = 0; i < N; i++) nodes[i] = new Node(i, xPos[i], yPos[i]);
+              
+            int cnt = 0;
+            long mst = 0l;
+            PriorityQueue<Edge> pq = new PriorityQueue<>();
+            cost[0] = 0;
+            pq.offer(new Edge(nodes[0], nodes[0]));
+            while(!pq.isEmpty()) {
+                Edge cur = pq.poll();
+                Node minVertex = cur.n2;
+                long min = cur.weight;
+                if(visited[minVertex.idx]) continue;
+                visited[minVertex.idx] = true;
+                mst += min;
+                if(cnt++ == N - 1) break;
+                for(int i = 0; i < N; i++) {
+                    if(!visited[i] && cost[i] > getCost(minVertex, nodes[i])) {
+                        cost[i] = getCost(minVertex, nodes[i]);
+                        pq.offer(new Edge(minVertex, nodes[i]));
+                    }
                 }
             }
-
-            // 정렬
-            Arrays.sort(edges);
-
-            // 크루스칼 알고리즘
-            double result = 0;
-            for (Edge edge : edges) {
-                if (union(edge.A, edge.B)) {
-                    result += edge.W; 
-                }
-            }
-
-            // 결과 출력
-            System.out.printf("#%d %.0f\n", tc, result);
+              
+            double E = Double.parseDouble(br.readLine());
+            sb.append(Math.round(mst * E)).append("\n");
         }
+          
+        System.out.print(sb.toString());
+        br.close();
     }
-
-    private static boolean union(int a, int b) {
-        int rootA = find(a);
-        int rootB = find(b);
-        if (rootA != rootB) {
-            p[rootB] = rootA; 
-            return true;
-        }
-        return false; 
-    }
-
-    private static int find(int x) {
-        if (p[x] != x) {
-            p[x] = find(p[x]); 
-        }
-        return p[x];
-    }
-
-    private static void makeSet() {
-        for (int i = 0; i < N; i++) {
-            p[i] = i; 
-        }
+      
+    public static long getCost(Node n1, Node n2) {
+        return (n1.x - n2.x) * (n1.x - n2.x) + (n1.y - n2.y) * (n1.y - n2.y);
     }
 }
