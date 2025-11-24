@@ -1,23 +1,37 @@
-import java.util.Scanner;
+import java.io.BufferedReader;
+import java.util.*;
+import java.io.*;
 
-interface Main {
-    public static void main (String[] args) {
-        Scanner sc = new Scanner(System.in);
-        int N = sc.nextInt(), x_point, y_point, area = 0;
-        boolean[][] arr = new boolean[100][100];
+//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
+// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
+public class Main {
+    public static void main(String[] args) throws IOException {
 
-        for(int i=0; i<N; i++) {
-            x_point = sc.nextInt();
-            y_point = sc.nextInt();
-            for(int x=x_point; x<x_point+10; x++) {
-                for(int y=y_point; y<y_point+10; y++) {
-                    if(!arr[y][x]) {
-                        area++;
-                        arr[y][x] = true;
-                    }                    
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        int N = Integer.parseInt(br.readLine());
+        boolean [][] array = new boolean[100][100];
+
+            for (int i = 0; i < N; i++) {
+                StringTokenizer st = new StringTokenizer(br.readLine());
+                    int x= Integer.parseInt(st.nextToken());
+                    int y= Integer.parseInt(st.nextToken());
+
+
+                    for(int j=x;j<x+10;j++){
+                        for(int k=y;k<y+10;k++){
+                            array[j][k]= true;
+                        }
+                    }
+            }
+
+            int answer = 0;
+            for (int i = 0; i < 100; i++) {
+                for (int j = 0; j < 100; j++) {
+                    if(array[i][j]) answer++;
                 }
-             }
+            }
+
+            System.out.println(answer);
         }
-        System.out.println(area);
+
     }
-}
